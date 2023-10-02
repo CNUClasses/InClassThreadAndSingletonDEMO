@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Mysingleton.getInstance().attach(this);
+
+        //configure UI
         manipUI(Mysingleton.getInstance().bEnable);
     }
 

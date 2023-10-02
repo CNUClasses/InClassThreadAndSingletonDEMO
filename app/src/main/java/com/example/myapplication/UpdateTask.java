@@ -17,15 +17,13 @@ public class UpdateTask extends Thread{
     public void run() {
         super.run();
         SystemClock.sleep(4000);
-
         //rotate phone now, activity destroyed and GCed
-        //next line may crash with with deref null pointer
-        //unless reattach happens first in main thread
 
-        //now update the textbox in mainactivity
         if (act != null)
-            //activity=null;    //simulates Activity being detached after above line but before next
 
+            //next line may crash with with deref null pointer
+            //unless reattach happens first in main thread
+            //activity=null;    //simulates Activity being detached after above line but before next
             act.runOnUiThread(new Runnable() {
                 public void run() {
                     //will this crash? No, this thread holds a ref to the activity
