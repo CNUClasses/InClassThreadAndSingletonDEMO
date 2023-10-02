@@ -1,34 +1,38 @@
 package com.example.myapplication;
 
 import android.os.SystemClock;
-import android.widget.TextView;
 
-public class Updatetask extends Thread{
-    private MainActivity activity;
-    private int cnt;
+import java.lang.ref.WeakReference;
 
-    public Updatetask(MainActivity act,int cnt) {
-        this.cnt=cnt;
+public class UpdateTask extends Thread{
+    private MainActivity  act;
+
+    public UpdateTask(MainActivity act) {
         attach(act);
     }
-    public void attach(MainActivity act){activity=act;}
-    public void detach(){activity=null;}
+    public void attach(MainActivity act){this.act=act;}
+    public void detach(){act=null;}
 
     @Override
     public void run() {
         super.run();
-        SystemClock.sleep(2000);
+        SystemClock.sleep(4000);
+
+        //rotate phone now, activity destroyed and GCed
+        //next line may crash with with deref null pointer
+        //unless reattach happens first in main thread
 
         //now update the textbox in mainactivity
-        if (activity != null)
+        if (act != null)
             //activity=null;    //simulates Activity being detached after above line but before next
-            activity.runOnUiThread(new Runnable() {
+
+            act.runOnUiThread(new Runnable() {
                 public void run() {
                     //will this crash? No, this thread holds a ref to the activity
                     //so its not garbage collected, but the below change happens
                     // to the old activity, not the new one
-                    TextView tv=activity.findViewById(R.id.tv);
-                    tv.setText("Finished Thread "+Integer.toString(cnt));
+
+                    act.manipUI(true);
                 }
             });
     }

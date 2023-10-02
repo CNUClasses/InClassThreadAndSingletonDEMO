@@ -2,8 +2,11 @@ package com.example.myapplication;
 
 public class Mysingleton {
     private static Mysingleton INSTANCE;
-    private static Updatetask mt;
-    private static int cnt=0;
+//    private Updatetask_with_weakref mt;
+    private UpdateTask mt;
+
+    //UI enabled?
+    public boolean bEnable=true;
 
     //dont let anyone create this
     private Mysingleton() {
@@ -15,21 +18,20 @@ public class Mysingleton {
         return INSTANCE;
     }
 
-    public static void start(MainActivity act){
-        mt=new Updatetask(act,cnt);
+    public void start(MainActivity act){
+        bEnable=false;
+//        mt=new Updatetask_with_weakref(act);
+        mt=new UpdateTask(act);
         mt.start();
-        cnt++;
     }
 
-    public static void attach(MainActivity act){
+    public void attach(MainActivity act){
         if(mt != null)
             mt.attach(act);
     }
 
-    public static void detach(){
+    public void detach(){
         if(mt != null)
             mt.detach();
     }
-
-
 }
